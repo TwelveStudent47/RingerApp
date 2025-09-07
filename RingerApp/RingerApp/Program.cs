@@ -80,7 +80,6 @@ namespace RingerApp
                 this.MaximizeBox = false;
                 this.Icon = SystemIcons.Application;
 
-                // Sablon kezelés csoport
                 GroupBox templateGroup = new GroupBox();
                 templateGroup.Text = "Sablonok";
                 templateGroup.Location = new Point(20, 10);
@@ -143,7 +142,6 @@ namespace RingerApp
                 saveTemplateButton.Click += SaveTemplateButton_Click;
                 templateGroup.Controls.Add(saveTemplateButton);
 
-                // Dátum és idő csoport
                 GroupBox dateTimeGroup = new GroupBox();
                 dateTimeGroup.Text = "Időpont beállítása";
                 dateTimeGroup.Location = new Point(20, 120);
@@ -183,7 +181,6 @@ namespace RingerApp
                 repeatCheckBox.CheckedChanged += RepeatCheckBox_CheckedChanged;
                 dateTimeGroup.Controls.Add(repeatCheckBox);
 
-                // Hét napjai
                 string[] dayNames = { "H", "K", "Sz", "Cs", "P", "Szo", "V" };
                 weekdayCheckBoxes = new CheckBox[7];
                 for (int i = 0; i < 7; i++)
@@ -203,7 +200,6 @@ namespace RingerApp
                 selectWeekdaysButton.Click += SelectWeekdaysButton_Click;
                 dateTimeGroup.Controls.Add(selectWeekdaysButton);
 
-                // Hangfájl csoport
                 GroupBox audioGroup = new GroupBox();
                 audioGroup.Text = "Hangfájl beállítása";
                 audioGroup.Location = new Point(20, 215);
@@ -264,7 +260,6 @@ namespace RingerApp
                 stopButton.Click += StopButton_Click;
                 audioGroup.Controls.Add(stopButton);
 
-                // Lista csoport
                 GroupBox listGroup = new GroupBox();
                 listGroup.Text = "Ütemezett hangok";
                 listGroup.Location = new Point(20, 365);
@@ -285,7 +280,6 @@ namespace RingerApp
                 removeButton.Click += RemoveButton_Click;
                 listGroup.Controls.Add(removeButton);
 
-                // Státusz
                 statusLabel = new Label();
                 statusLabel.Text = "Készen áll...";
                 statusLabel.Location = new Point(20, 655);
@@ -295,7 +289,6 @@ namespace RingerApp
 
                 this.ResumeLayout();
 
-                // Template ComboBox inicializálása
                 UpdateTemplateComboBox();
             }
             catch (Exception ex)
@@ -327,7 +320,7 @@ namespace RingerApp
         {
             try
             {
-                for (int i = 0; i < 5; i++) // Hétfő-Péntek (0-4)
+                for (int i = 0; i < 5; i++)
                 {
                     weekdayCheckBoxes[i].Checked = true;
                 }
@@ -378,7 +371,6 @@ namespace RingerApp
 
                 string templateName = templateNameTextBox.Text.Trim();
 
-                // Ellenőrizzük, hogy már létezik-e
                 var existingTemplate = templates.FirstOrDefault(t => t.Name.Equals(templateName, StringComparison.OrdinalIgnoreCase));
                 if (existingTemplate != null)
                 {
@@ -793,7 +785,6 @@ namespace RingerApp
             }
             catch (Exception ex)
             {
-                // Csendes hiba kezelés a StopCurrentPlayback-ben
                 System.Diagnostics.Debug.WriteLine($"Hiba a playback leállításakor: {ex.Message}");
             }
         }
@@ -1016,7 +1007,6 @@ namespace RingerApp
                     currentNotificationForm = null;
                 };
 
-                // Non-blocking notification
                 currentNotificationForm.Show(this);
             }
             catch (Exception ex)
