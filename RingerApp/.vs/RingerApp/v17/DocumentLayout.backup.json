@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{0BE24D5E-29FF-4084-B700-9221071DA912}|RingerApp\\RingerApp.csproj|solutionrelative:ringerapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0BE24D5E-29FF-4084-B700-9221071DA912}|RingerApp\\RingerApp.csproj|d:\\my codes\\ringerapp\\ringerapp\\ringerapp\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{0BE24D5E-29FF-4084-B700-9221071DA912}|RingerApp\\RingerApp.csproj|D:\\My Codes\\RingerApp\\RingerApp\\ringerapp\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{0BE24D5E-29FF-4084-B700-9221071DA912}|RingerApp\\RingerApp.csproj|solutionrelative:ringerapp\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
@@ -28,7 +28,7 @@
               "RelativeDocumentMoniker": "RingerApp\\Program.cs",
               "ToolTip": "D:\\My Codes\\RingerApp\\RingerApp\\RingerApp\\Program.cs",
               "RelativeToolTip": "RingerApp\\Program.cs",
-              "ViewState": "AgIAAFIBAAAAAAAAAAAswGgBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAgEAAAAAAAAAAAwwBwEAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-02T18:09:05.03Z",
               "EditorCaption": ""
@@ -42,8 +42,7 @@
               "ToolTip": "D:\\My Codes\\RingerApp\\RingerApp\\RingerApp\\Form1.cs [Design]",
               "RelativeToolTip": "RingerApp\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-02T18:09:01.844Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2025-09-02T18:09:01.844Z"
             }
           ]
         }
