@@ -34,6 +34,8 @@ namespace RingerApp
         private Button deleteTemplateButton;
         private TextBox templateNameTextBox;
         private Button clearAllButton;
+        private Button normalScheduleButton;
+        private Button shortScheduleButton;
 
         private IWavePlayer wavePlayer;
         private AudioFileReader audioFileReader;
@@ -74,15 +76,40 @@ namespace RingerApp
                 this.SuspendLayout();
 
                 this.Text = "Széchenyi Csengetési Rendszer";
-                this.Size = new Size(700, 750);
+                this.Size = new Size(700, 780);
                 this.StartPosition = FormStartPosition.CenterScreen;
                 this.FormBorderStyle = FormBorderStyle.FixedSingle;
                 this.MaximizeBox = false;
                 this.Icon = SystemIcons.Application;
 
+                // Gyors sablon választó gombok
+                GroupBox quickTemplateGroup = new GroupBox();
+                quickTemplateGroup.Text = "Gyors sablon választás";
+                quickTemplateGroup.Location = new Point(20, 10);
+                quickTemplateGroup.Size = new Size(640, 70);
+                this.Controls.Add(quickTemplateGroup);
+
+                normalScheduleButton = new Button();
+                normalScheduleButton.Text = "Rendes csengetési rend";
+                normalScheduleButton.Location = new Point(50, 25);
+                normalScheduleButton.Size = new Size(200, 35);
+                normalScheduleButton.BackColor = Color.LightGreen;
+                normalScheduleButton.Font = new Font("Microsoft Sans Serif", 10f, FontStyle.Bold);
+                normalScheduleButton.Click += NormalScheduleButton_Click;
+                quickTemplateGroup.Controls.Add(normalScheduleButton);
+
+                shortScheduleButton = new Button();
+                shortScheduleButton.Text = "Rövidített órák";
+                shortScheduleButton.Location = new Point(390, 25);
+                shortScheduleButton.Size = new Size(200, 35);
+                shortScheduleButton.BackColor = Color.LightBlue;
+                shortScheduleButton.Font = new Font("Microsoft Sans Serif", 10f, FontStyle.Bold);
+                shortScheduleButton.Click += ShortScheduleButton_Click;
+                quickTemplateGroup.Controls.Add(shortScheduleButton);
+
                 GroupBox templateGroup = new GroupBox();
-                templateGroup.Text = "Sablonok";
-                templateGroup.Location = new Point(20, 10);
+                templateGroup.Text = "Egyéb sablonok";
+                templateGroup.Location = new Point(20, 90);
                 templateGroup.Size = new Size(640, 100);
                 this.Controls.Add(templateGroup);
 
@@ -144,7 +171,7 @@ namespace RingerApp
 
                 GroupBox dateTimeGroup = new GroupBox();
                 dateTimeGroup.Text = "Időpont beállítása";
-                dateTimeGroup.Location = new Point(20, 120);
+                dateTimeGroup.Location = new Point(20, 200);
                 dateTimeGroup.Size = new Size(640, 85);
                 this.Controls.Add(dateTimeGroup);
 
@@ -202,7 +229,7 @@ namespace RingerApp
 
                 GroupBox audioGroup = new GroupBox();
                 audioGroup.Text = "Hangfájl beállítása";
-                audioGroup.Location = new Point(20, 215);
+                audioGroup.Location = new Point(20, 295);
                 audioGroup.Size = new Size(640, 140);
                 this.Controls.Add(audioGroup);
 
@@ -262,7 +289,7 @@ namespace RingerApp
 
                 GroupBox listGroup = new GroupBox();
                 listGroup.Text = "Ütemezett hangok";
-                listGroup.Location = new Point(20, 365);
+                listGroup.Location = new Point(20, 445);
                 listGroup.Size = new Size(640, 280);
                 this.Controls.Add(listGroup);
 
@@ -282,7 +309,7 @@ namespace RingerApp
 
                 statusLabel = new Label();
                 statusLabel.Text = "Készen áll...";
-                statusLabel.Location = new Point(20, 655);
+                statusLabel.Location = new Point(20, 735);
                 statusLabel.Size = new Size(640, 23);
                 statusLabel.ForeColor = Color.Blue;
                 this.Controls.Add(statusLabel);
@@ -296,6 +323,63 @@ namespace RingerApp
                 MessageBox.Show($"Hiba a felhasználói felület létrehozásakor: {ex.Message}\n\nStack trace:\n{ex.StackTrace}",
                     "Inicializálási hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
+            }
+        }
+
+        private void NormalScheduleButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                LoadTemplateByName("Rendes csengetési rend");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a rendes csengetési rend betöltésekor: {ex.Message}", "Hiba",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ShortScheduleButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                LoadTemplateByName("Rövidített órák");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a rövidített órák betöltésekor: {ex.Message}", "Hiba",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadTemplateByName(string templateName)
+        {
+            try
+            {
+                var template = templates.FirstOrDefault(t => t.Name.Equals(templateName, StringComparison.OrdinalIgnoreCase));
+                if (template == null)
+                {
+                    MessageBox.Show($"A '{templateName}' sablon nem található a templates.json fájlban!\n\nEllenőrizze, hogy a sablon létezik és a neve pontosan egyezik.",
+                        "Sablon nem található", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                LoadTemplate(template);
+
+                // Frissítjük a combobox kiválasztást is
+                for (int i = 0; i < templateComboBox.Items.Count; i++)
+                {
+                    if (templateComboBox.Items[i].ToString().Equals(templateName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        templateComboBox.SelectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a sablon betöltésekor: {ex.Message}", "Hiba",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -340,7 +424,12 @@ namespace RingerApp
                 templateComboBox.Items.Add("-- Válasszon sablont --");
                 foreach (var template in templates)
                 {
-                    templateComboBox.Items.Add(template.Name);
+                    // Kihagyjuk a gyors gombok sablonjai, hogy ne duplikálódjanak
+                    if (!template.Name.Equals("Rendes csengetési rend", StringComparison.OrdinalIgnoreCase) &&
+                        !template.Name.Equals("Rövidített órák", StringComparison.OrdinalIgnoreCase))
+                    {
+                        templateComboBox.Items.Add(template.Name);
+                    }
                 }
                 templateComboBox.SelectedIndex = 0;
             }
